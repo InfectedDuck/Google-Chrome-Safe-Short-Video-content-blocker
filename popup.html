@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reels Blocker</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="panel" aria-labelledby="title">
+      <div class="brand-row">
+        <img src="icons/icon-48.png" width="40" height="40" alt="">
+        <div>
+          <h1 id="title">Reels Blocker</h1>
+          <p class="status" id="activeStatus">Checking...</p>
+        </div>
+      </div>
+
+      <section class="summary" aria-label="Current settings">
+        <div>
+          <span class="metric" id="modeLabel">Always On</span>
+          <span class="caption">Mode</span>
+        </div>
+        <div>
+          <span class="metric" id="customCount">0</span>
+          <span class="caption">Custom</span>
+        </div>
+        <div>
+          <span class="metric" id="presetCount">0</span>
+          <span class="caption">Presets</span>
+        </div>
+      </section>
+
+      <section aria-label="Privacy promise">
+        <h2>No creepy permissions</h2>
+        <ul class="trust-list">
+          <li>No browsing history</li>
+          <li>No host permissions</li>
+          <li>No content scripts</li>
+          <li>No tracking or remote code</li>
+        </ul>
+      </section>
+
+      <div class="actions">
+        <button id="openOptions" type="button">Settings</button>
+        <a href="blocked.html" target="_blank" rel="noreferrer">Focus page</a>
+      </div>
+    </main>
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

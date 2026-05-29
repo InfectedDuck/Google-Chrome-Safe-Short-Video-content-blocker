@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A privacy-first Chrome extension that blocks TikTok, Instagram Reels, and YouTube Shorts without browsing history or site-data access.">
+    <title>Reels Blocker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/icon-128.png">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Reels Blocker home">
+        <img src="assets/icon-128.png" width="34" height="34" alt="">
+        <span>Reels Blocker</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#privacy">Privacy</a>
+        <a href="#install">Install</a>
+        <a href="#github">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Chrome extension</p>
+          <h1>Block short-form video without creepy permissions.</h1>
+          <p class="lede">Reels Blocker stops TikTok, Instagram Reels, YouTube Shorts, optional short-form presets, and custom entries using local Chrome rules. No browsing history. No site-data access. No tracking.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/your-username/reels-blocker">View on GitHub</a>
+            <a class="button secondary" href="#install">Install locally</a>
+          </div>
+        </div>
+        <div class="trust-panel" aria-label="Permission promise">
+          <img src="assets/icon-128.png" width="96" height="96" alt="">
+          <ul>
+            <li>No browsing history access</li>
+            <li>No website data access</li>
+            <li>No content scripts</li>
+            <li>No analytics or remote code</li>
+            <li>Local settings only</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="privacy" class="band">
+        <div class="section-heading">
+          <p class="eyebrow">Privacy promise</p>
+          <h2>The blocker is intentionally small.</h2>
+        </div>
+        <div class="proof-grid">
+          <article>
+            <h3>Chrome blocks locally</h3>
+            <p>The extension uses Manifest V3 declarative rules, so Chrome applies blocking without the extension reading page contents.</p>
+          </article>
+          <article>
+            <h3>Only minimal permissions</h3>
+            <p>It avoids host permissions, browsing history permissions, cookies, tabs, content scripts, and account sign-in.</p>
+          </article>
+          <article>
+            <h3>Open source by design</h3>
+            <p>The rules, scripts, and privacy policy are visible in the repository so users can inspect what the extension does.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="blocked">
+        <div class="section-heading">
+          <p class="eyebrow">Blocked by default</p>
+          <h2>Short-form destinations, not your whole browser.</h2>
+        </div>
+        <div class="platforms">
+          <span>TikTok</span>
+          <span>Instagram Reels</span>
+          <span>YouTube Shorts</span>
+          <span>Custom entries</span>
+          <span>Local schedules</span>
+          <span>Optional presets</span>
+        </div>
+      </section>
+
+      <section id="install" class="band split">
+        <div>
+          <p class="eyebrow">Install locally</p>
+          <h2>Try it before the store listing is live.</h2>
+        </div>
+        <ol>
+          <li>Download or clone the repository.</li>
+          <li>Open <code>chrome://extensions</code>.</li>
+          <li>Enable Developer mode.</li>
+          <li>Click Load unpacked and select the project folder.</li>
+        </ol>
+      </section>
+
+      <section id="github" class="github">
+        <div>
+          <p class="eyebrow">For reviewers and users</p>
+          <h2>Built to be easy to audit.</h2>
+          <p>Every release is tagged, packaged, and documented. The public repository is the proof that this blocker is focused on one job.</p>
+        </div>
+        <a class="button primary" href="https://github.com/your-username/reels-blocker">Open GitHub repo</a>
+      </section>
+    </main>
+
+    <footer>
+      <span>Reels Blocker</span>
+      <a href="https://github.com/your-username/reels-blocker">GitHub</a>
+    </footer>
+  </body>
+</html>

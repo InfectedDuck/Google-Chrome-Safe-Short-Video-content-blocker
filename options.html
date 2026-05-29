@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reels Blocker Settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main class="settings-shell">
+      <header>
+        <div>
+          <p class="eyebrow">Privacy-first settings</p>
+          <h1>Reels Blocker</h1>
+        </div>
+        <img src="icons/icon-48.png" width="48" height="48" alt="">
+      </header>
+
+      <section aria-labelledby="schedule-title">
+        <h2 id="schedule-title">Schedule</h2>
+        <div class="mode-grid" role="radiogroup" aria-label="Blocking schedule">
+          <label>
+            <input type="radio" name="mode" value="always">
+            <span>Always On</span>
+          </label>
+          <label>
+            <input type="radio" name="mode" value="work_hours">
+            <span>Work Hours</span>
+          </label>
+          <label>
+            <input type="radio" name="mode" value="custom">
+            <span>Custom</span>
+          </label>
+        </div>
+        <div class="time-row">
+          <label>
+            <span>Start</span>
+            <input id="customStart" type="time" value="09:00">
+          </label>
+          <label>
+            <span>End</span>
+            <input id="customEnd" type="time" value="17:00">
+          </label>
+        </div>
+      </section>
+
+      <section aria-labelledby="custom-title">
+        <h2 id="custom-title">Custom Block List</h2>
+        <form id="entryForm" class="entry-form">
+          <label>
+            <span>Domain or path</span>
+            <input id="entryInput" type="text" inputmode="url" placeholder="facebook.com/reel" autocomplete="off">
+          </label>
+          <button type="submit">Add</button>
+        </form>
+        <p id="entryError" class="error" aria-live="polite"></p>
+        <ul id="entryList" class="entry-list"></ul>
+      </section>
+
+      <section aria-labelledby="presets-title">
+        <h2 id="presets-title">Optional Presets</h2>
+        <div id="presetList" class="preset-list"></div>
+      </section>
+
+      <section class="trust" aria-labelledby="trust-title">
+        <h2 id="trust-title">Trust Check</h2>
+        <ul>
+          <li>No browsing history permission</li>
+          <li>No host permissions</li>
+          <li>No content scripts</li>
+          <li>Settings stay in local Chrome storage</li>
+        </ul>
+      </section>
+
+      <footer>
+        <button id="saveButton" type="button">Save Settings</button>
+        <span id="saveStatus" role="status" aria-live="polite"></span>
+      </footer>
+    </main>
+    <script src="shared.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
