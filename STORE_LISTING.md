@@ -1,35 +1,59 @@
-# Chrome Web Store Listing Draft
+# Chrome Web Store Listing — ReelLess v2.2.0
 
-## Short Description
+## Name
 
-Blocks short-form video with local Chrome rules and privacy-first permissions.
+ReelLess — Shorts & Reels Blocker
 
-## Detailed Description
+## Summary
 
-Reels Blocker helps reduce short-form video distractions by blocking TikTok, Instagram Reels, and YouTube Shorts. You can also add your own local block entries, enable optional short-form presets, and choose Always On, Work Hours, or Custom Schedule modes.
+Remove YouTube Shorts, Instagram and Facebook Reels, and TikTok distractions while keeping useful pages available.
 
-The extension is intentionally simple and privacy-friendly. It uses Chrome's built-in Manifest V3 `declarativeNetRequest` API, which means Chrome applies the block rules locally. There are no content scripts, no host permissions, no analytics, no remote code, and no browsing history access.
+## Detailed description
 
-Blocked destinations:
+ReelLess helps students and knowledge workers avoid short-form feeds without giving up the useful parts of social platforms.
 
-- TikTok website
-- Instagram Reels
-- YouTube Shorts
-- Optional preset short-form destinations
-- Custom domain/path entries you add locally
+Four calm defaults work immediately:
 
-## Single Purpose
+- YouTube: hide Shorts navigation, shelves, cards, results, and channel tabs; open a direct Short as a regular video.
+- Instagram: hide Reels entry points and return direct Reel visits to the feed.
+- Facebook: hide Reels entry points and return direct Reel visits to the feed.
+- TikTok: replace feed and video surfaces with a quiet focus screen.
 
-Block selected short-form video destinations in Chrome.
+The popup shows protection status, local today/all-time blocked-attempt counts, four platform switches, and quick pauses for 5, 15, or 30 minutes or until tomorrow. Choose Dark, Light, or Use Chrome setting from Settings.
 
-## Permission Justification
+Advanced controls progressively reveal schedules, selected/full-site modes for seven additional platforms, TikTok utility-section exceptions, and custom blocked domains. Additional site access is requested only when the user enables that site.
 
-`declarativeNetRequest`: Required so Chrome can apply local block rules for TikTok, Instagram Reels, and YouTube Shorts.
+For extra self-control, an optional Ultimate Lock can force protection on and remove ReelLess's own pause/settings controls. Its removal requires a clear choice, a typed phrase, and an uninterrupted one-minute wait. It does not claim to prevent Chrome or a device administrator from disabling, uninstalling, or clearing the extension.
 
-`storage`: Required to save custom block entries, preset toggles, and schedule settings locally on the user's device.
+ReelLess is free, open source, account-free, ad-free, and telemetry-free. It makes no external requests and stores no blocked URL, title, or platform history.
 
-`alarms`: Required to apply schedule changes at the correct local time.
+## Single purpose
 
-## Data Use
+Remove or interrupt user-selected short-form video and distracting social-platform sections while preserving useful pages.
 
-This extension does not collect or transmit user data.
+## Permission explanations
+
+- `storage`: saves blocking choices, schedules, pause expiry, appearance preference, optional Ultimate Lock state, custom entries, prompt state, and two local counters.
+- `alarms`: refreshes schedule and pause state at local time boundaries.
+- `scripting`: dynamically registers a site-specific guard after the user grants access to an Advanced platform.
+- `declarativeNetRequestWithHostAccess`: applies block-only rules to custom domains that the user added and explicitly granted.
+- Core site access: YouTube, Instagram, Facebook, and TikTok guards inspect the current URL and specific local links/elements needed to find short-form entry points.
+- Optional site access: Advanced platforms and arbitrary custom domains request exact origins only from an explicit user action and remove access when disabled.
+
+## Data-use disclosure
+
+No user data is collected or transmitted. Processing and storage remain local. The counter schema is only `{localDay, todayCount, totalCount}`.
+
+## Support and privacy
+
+- Privacy: publish `docs/privacy.html` with GitHub Pages.
+- Support: https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker/issues
+- Source: https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker
+
+## Trademark notice
+
+ReelLess is an independent extension and is not affiliated with, endorsed by, or sponsored by YouTube, Google, Instagram, Facebook, Meta, TikTok, ByteDance, or any other supported platform. Names and trademarks belong to their respective owners.
+
+## Release assets
+
+Use the five 1280×800 PNG files in `store-assets/`, the 440×280 promo tile, and optional 1400×560 marquee tile. Screenshots must show the real extension UI and must not imply platform affiliation.

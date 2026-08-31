@@ -1,108 +1,200 @@
 importScripts("shared.js");
 
-const RB = self.ReelsBlocker;
-const SETTINGS_KEY = "settings";
-const SCHEDULE_ALARM = "apply-schedule";
+const {
+  SETTINGS_KEY,
+  LEGACY_SETTINGS_KEY,
+  STATS_KEY,
+  META_KEY,
+  CORE_PLATFORM_IDS,
+  PLATFORMS,
+  normalizeSettings,
+  normalizeStats,
+  normalizeMeta,
+  buildDynamicRules,
+  permissionPatternForEntry,
+  pauseUntil,
+  reviewEligible
+} = ReelLess;
 
-function chromeCall(api, method, argument) {
-  return new Promise((resolve, reject) => {
-    const callback = (result) => {
-      const error = chrome.runtime.lastError;
-      if (error) {
-        reject(new Error(error.message));
-        return;
+const REFRESH_ALARM = "reelless-refresh";
+const SCRIPT_PREFIX = "reelless-advanced-";
+const recentEvents = new Map();
+let statsQueue = Promise.resolve();
+let applyQueue = Promise.resolve();
+
+async function readState() {
+  const stored = await chrome.storage.local.get([SETTINGS_KEY, LEGACY_SETTINGS_KEY, STATS_KEY, META_KEY]);
+  const settings = normalizeSettings(stored[SETTINGS_KEY] || stored[LEGACY_SETTINGS_KEY]);
+  const stats = normalizeStats(stored[STATS_KEY]);
+  const meta = normalizeMeta(stored[META_KEY]);
+  const updates = {};
+  if (!stored[SETTINGS_KEY] || JSON.stringify(stored[SETTINGS_KEY]) !== JSON.stringify(settings)) updates[SETTINGS_KEY] = settings;
+  if (!stored[STATS_KEY] || JSON.stringify(stored[STATS_KEY]) !== JSON.stringify(stats)) updates[STATS_KEY] = stats;
+  if (!stored[META_KEY]) updates[META_KEY] = meta;
+  if (Object.keys(updates).length) await chrome.storage.local.set(updates);
+  return { settings, stats, meta };
+}
+
+async function hasOrigins(origins) {
+  if (!origins.length) return false;
+  try {
+    return await chrome.permissions.contains({ origins });
+  } catch (_error) {
+    return false;
+  }
+}
+
+async function permittedCustomEntries(settings) {
+  const results = await Promise.all(settings.customEntries.map(async (entry) => {
+    const pattern = permissionPatternForEntry(entry);
+    return pattern && await hasOrigins([pattern]) ? entry : null;
+  }));
+  return results.filter(Boolean);
+}
+
+async function syncDynamicRules(settings) {
+  const current = await chrome.declarativeNetRequest.getDynamicRules();
+  const permittedEntries = await permittedCustomEntries(settings);
+  const next = buildDynamicRules(settings, permittedEntries, new Date());
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: current.map((rule) => rule.id),
+    addRules: next
+  });
+}
+
+async function syncAdvancedGuards(settings) {
+  const registrations = await chrome.scripting.getRegisteredContentScripts();
+  const registeredIds = new Set(registrations.map((item) => item.id));
+  const desired = [];
+
+  for (const platform of PLATFORMS.filter((item) => !CORE_PLATFORM_IDS.includes(item.id))) {
+    const id = `${SCRIPT_PREFIX}${platform.id}`;
+    const enabled = settings.platforms[platform.id].mode !== "off";
+    const granted = enabled && await hasOrigins(platform.permissionPatterns);
+    if (granted) {
+      desired.push(id);
+      if (!registeredIds.has(id)) {
+        await chrome.scripting.registerContentScripts([{
+          id,
+          matches: platform.permissionPatterns,
+          js: ["shared.js", "site_guard.js"],
+          css: ["site_guard.css"],
+          runAt: "document_start",
+          persistAcrossSessions: true
+        }]);
       }
-      resolve(result);
-    };
-
-    if (typeof argument === "undefined") {
-      api[method](callback);
-      return;
     }
+  }
 
-    api[method](argument, callback);
+  const obsolete = Array.from(registeredIds).filter((id) => id.startsWith(SCRIPT_PREFIX) && !desired.includes(id));
+  if (obsolete.length) await chrome.scripting.unregisterContentScripts({ ids: obsolete });
+}
+
+async function applySettingsNow() {
+  const { settings } = await readState();
+  await Promise.all([syncDynamicRules(settings), syncAdvancedGuards(settings)]);
+  return settings;
+}
+
+function applySettings() {
+  applyQueue = applyQueue.then(applySettingsNow, applySettingsNow);
+  return applyQueue;
+}
+
+function pruneRecentEvents(now) {
+  for (const [id, timestamp] of recentEvents) {
+    if (now - timestamp > 5000) recentEvents.delete(id);
+  }
+}
+
+async function recordBlockAttempt(message) {
+  const eventId = typeof message.eventId === "string" ? message.eventId.slice(0, 100) : "";
+  const now = Date.now();
+  pruneRecentEvents(now);
+  if (eventId && recentEvents.has(eventId)) return (await readState()).stats;
+  if (eventId) recentEvents.set(eventId, now);
+
+  statsQueue = statsQueue.then(async () => {
+    const stored = await chrome.storage.local.get([STATS_KEY, META_KEY]);
+    const stats = normalizeStats(stored[STATS_KEY], new Date(now));
+    stats.todayCount += 1;
+    stats.totalCount += 1;
+    const meta = normalizeMeta(stored[META_KEY]);
+    if (meta.lastActiveDay !== stats.localDay) {
+      meta.lastActiveDay = stats.localDay;
+      meta.activeDayCount += 1;
+    }
+    const updates = { [STATS_KEY]: stats, [META_KEY]: meta };
+    if (reviewEligible(meta, stats, new Date(now))) {
+      meta.reviewShown = true;
+    }
+    await chrome.storage.local.set(updates);
+    return stats;
   });
+  return statsQueue;
 }
 
-async function getSettings() {
-  const result = await chromeCall(chrome.storage.local, "get", { [SETTINGS_KEY]: RB.DEFAULT_SETTINGS });
-  return RB.normalizeSettings(result[SETTINGS_KEY]);
+async function setPause(duration) {
+  const { settings } = await readState();
+  if (settings.ultimate.enabled) return { settings, locked: true };
+  settings.pausedUntil = pauseUntil(duration, new Date());
+  await chrome.storage.local.set({ [SETTINGS_KEY]: settings });
+  await applySettings();
+  return { settings, locked: false };
 }
 
-async function enableStaticRules(enabled) {
-  await chromeCall(chrome.declarativeNetRequest, "updateEnabledRulesets", {
-    enableRulesetIds: enabled ? [RB.STATIC_RULESET_ID] : [],
-    disableRulesetIds: enabled ? [] : [RB.STATIC_RULESET_ID]
-  });
-}
-
-async function syncDynamicRules(rules) {
-  const currentRules = await chromeCall(chrome.declarativeNetRequest, "getDynamicRules");
-  const managedIds = new Set(RB.managedRuleIds());
-  const removeRuleIds = currentRules.map((rule) => rule.id).filter((id) => managedIds.has(id));
-
-  await chromeCall(chrome.declarativeNetRequest, "updateDynamicRules", {
-    removeRuleIds,
-    addRules: rules
-  });
-}
-
-async function ensureScheduleAlarm() {
-  await chromeCall(chrome.alarms, "clear", SCHEDULE_ALARM);
-
-  await new Promise((resolve, reject) => {
-    chrome.alarms.create(SCHEDULE_ALARM, {
-      delayInMinutes: 1,
-      periodInMinutes: 1
-    }, () => {
-      const error = chrome.runtime.lastError;
-      if (error) {
-        reject(new Error(error.message));
-        return;
-      }
-      resolve();
-    });
-  });
-}
-
-async function applySettings() {
-  const settings = await getSettings();
-  const active = RB.isBlockingActive(settings.schedule, new Date());
-  const dynamicRules = active ? RB.buildDynamicRules(settings) : [];
-
-  await enableStaticRules(active);
-  await syncDynamicRules(dynamicRules);
-  await ensureScheduleAlarm();
-}
-
-chrome.runtime.onInstalled.addListener(() => {
-  applySettings();
+chrome.runtime.onInstalled.addListener((details) => {
+  (async () => {
+    await readState();
+    await chrome.alarms.create(REFRESH_ALARM, { periodInMinutes: 1 });
+    await applySettings();
+    if (details.reason === "install") await chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") });
+  })().catch((error) => console.error("ReelLess install setup failed", error));
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  applySettings();
+  chrome.alarms.create(REFRESH_ALARM, { periodInMinutes: 1 });
+  applySettings().catch((error) => console.error("ReelLess startup sync failed", error));
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === SCHEDULE_ALARM) {
-    applySettings();
+  if (alarm.name === REFRESH_ALARM) applySettings().catch((error) => console.error("ReelLess schedule refresh failed", error));
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes[SETTINGS_KEY]) {
+    applySettings().catch((error) => console.error("ReelLess settings sync failed", error));
   }
 });
 
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && Object.prototype.hasOwnProperty.call(changes, SETTINGS_KEY)) {
-    applySettings();
-  }
-});
+if (chrome.permissions && chrome.permissions.onAdded) {
+  chrome.permissions.onAdded.addListener(() => applySettings().catch(console.error));
+  chrome.permissions.onRemoved.addListener(() => applySettings().catch(console.error));
+}
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (!message || message.type !== "applySettings") {
-    return false;
-  }
-
-  applySettings()
-    .then(() => sendResponse({ ok: true }))
-    .catch((error) => sendResponse({ ok: false, error: error.message }));
-
+  const task = (async () => {
+    if (!message || typeof message !== "object") return { ok: false };
+    if (message.type === "applySettings") return { ok: true, settings: await applySettings() };
+    if (message.type === "recordBlockAttempt") return { ok: true, stats: await recordBlockAttempt(message) };
+    if (message.type === "pause") return { ok: true, ...(await setPause(message.duration)) };
+    if (message.type === "getState") return { ok: true, ...(await readState()) };
+    if (message.type === "dismissReview") {
+      const stored = await chrome.storage.local.get(META_KEY);
+      const meta = normalizeMeta(stored[META_KEY]);
+      meta.reviewDismissed = true;
+      await chrome.storage.local.set({ [META_KEY]: meta });
+      return { ok: true };
+    }
+    return { ok: false };
+  })();
+  task.then(sendResponse).catch((error) => {
+    console.error("ReelLess message failed", error);
+    sendResponse({ ok: false, error: error.message });
+  });
   return true;
+});
+
+readState().then(() => chrome.alarms.create(REFRESH_ALARM, { periodInMinutes: 1 })).then(applySettings).catch((error) => {
+  console.error("ReelLess initialization failed", error);
 });

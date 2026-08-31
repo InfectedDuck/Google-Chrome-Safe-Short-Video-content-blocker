@@ -1,103 +1,67 @@
-# Reels Blocker
+# ReelLess — Shorts & Reels Blocker
 
-A privacy-friendly Chrome extension that blocks short-form video with local Chrome rules.
+ReelLess removes YouTube Shorts, Instagram and Facebook Reels, and TikTok distractions while keeping useful pages available. It is a free, open-source, account-free, ad-free, and telemetry-free Manifest V3 Chrome extension.
 
-## Trust First
-
-Reels Blocker is designed for people who want fewer short-form video distractions without installing an extension that can read every site they visit.
-
-It does not request browsing history, host permissions, content scripts, cookies, account access, analytics, or remote code. Custom entries, presets, and schedules are stored locally in Chrome.
-
-## What It Blocks
-
-- `tiktok.com` and subdomains
-- `instagram.com/reel/...`
-- `instagram.com/reels/...`
-- `youtube.com/shorts/...`
-- YouTube channel Shorts tabs, such as `youtube.com/@channel/shorts`
-- Optional presets for Facebook Reels, Snapchat Spotlight, and Reddit Shorts
-- Custom domain/path entries that you add yourself
-
-## Why It Is Safe
-
-- Uses Manifest V3.
-- Uses Chrome's `declarativeNetRequest` API, so Chrome applies the block rules locally.
-- Does not use content scripts.
-- Does not request host permissions.
-- Does not read browsing history.
-- Does not collect, store, sell, or transmit user data.
-- Does not load remote code.
-- Stores settings only in `chrome.storage.local`.
-
-## Features
-
-- Always On, Work Hours, and Custom Schedule modes.
-- Local custom block list.
-- Optional preset toggles for additional short-form sites.
-- Trust-focused popup and local focus page.
-
-## Install Locally
+## Launch locally in Google Chrome
 
 1. Open `chrome://extensions`.
-2. Turn on Developer mode.
-3. Click Load unpacked.
-4. Select this project folder.
-5. Visit `https://www.tiktok.com`, `https://www.instagram.com/reels/`, or `https://www.youtube.com/shorts/...` to confirm Chrome blocks the page.
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select this folder, not the ZIP:
 
-## Build A Store ZIP
+   `C:\Users\ASUS\Desktop\projects\reels_blocker`
 
-Run:
+5. Pin ReelLess from Chrome’s Extensions menu.
+6. Test YouTube Shorts, Instagram Reels, Facebook Reels, and TikTok.
+7. After code changes, click **Reload** on the extension card and refresh existing social tabs.
+8. Use the extension card’s service-worker link to check for errors.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build-package.ps1
-```
+## Product behavior
 
-The ZIP will be created at `dist/reels-blocker.zip`.
+- YouTube Shorts entry points are hidden; `/shorts/{id}` opens as `/watch?v={id}`.
+- Instagram and Facebook Reels entry points are hidden; direct Reel visits return to the normal feed.
+- Independent Instagram and Facebook controls can also hide and pause inline Direct/Messenger videos, without removing the conversation layout.
+- TikTok feed/video surfaces show a calm local focus screen. Selected utility sections can be allowed in Advanced settings.
+- Only deliberate blocked navigation or clicks increase the local today/all-time count. Hidden cards do not.
+- Schedules, seven additional platforms, full-site blocking, section controls, and custom domains live under Advanced.
 
-## GitHub Pages
+The four core sites are bundled. Advanced sites and custom domains request exact optional access only from a user action. Custom destinations use block-only dynamic rules; core redirects are handled by site-specific navigation guards.
 
-The public website lives in `docs/` so GitHub Pages can deploy directly from the `main` branch.
+### Ultimate Lock
 
-After pushing the repository, enable it in GitHub:
+Settings includes an opt-in **Ultimate Lock** for someone who wants extra friction against disabling protection. Choose either **Block all core short-form content** or **Keep my current platform choices**, type `I ACCEPT THE LOCK`, and confirm. It forces protection on, keeps the schedule always active, and removes the extension's normal pause and settings controls.
 
-1. Open repository Settings.
-2. Open Pages.
-3. Set Source to Deploy from a branch.
-4. Select `main` and `/docs`.
+To remove it, select **Remove Ultimate Lock**, type `REMOVE ULTIMATE`, and keep the Settings page focused for one uninterrupted minute before confirming. Leaving, reloading, or defocusing Settings resets the wait. This is deliberate in-extension friction only: Chrome or a device administrator can still disable, uninstall, or clear an extension.
 
-## Publish Checklist
+## Development checks
 
-1. Create a Chrome Web Store developer account.
-2. Build `dist/reels-blocker.zip`.
-3. Upload the ZIP in the Chrome Web Store Developer Dashboard.
-4. Use the text in `STORE_LISTING.md` as a starting point.
-5. Use `PRIVACY.md` as the extension privacy policy.
-6. Declare that the extension does not collect user data.
-7. Submit for review.
-
-Chrome Web Store rules can change, so verify the final listing requirements in the official dashboard before submitting.
-
-## Git Release Flow
-
-This repository uses manual SemVer tags.
+Install the test dependencies once:
 
 ```powershell
-git add .
-git commit -m "release: v1.0.0"
-git tag -a v1.0.0 -m "v1.0.0"
-git push origin main --follow-tags
+npm install
+npx playwright-core install chromium
 ```
 
-Upload `dist/reels-blocker.zip` to GitHub Releases and Chrome Web Store after the release checks pass.
-
-## Release Checklist
-
-Before each release:
+Then run:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/test-rules.ps1
-powershell -ExecutionPolicy Bypass -File scripts/validate-extension.ps1
-powershell -ExecutionPolicy Bypass -File scripts/build-package.ps1
+npm test
+npm run validate
+npm run smoke
+npm run build
 ```
 
-Then commit, tag, push, and upload `dist/reels-blocker.zip` as the release artifact.
+The smoke suite uses a temporary Chrome for Testing profile because current branded Chrome builds ignore command-line unpacked-extension loading. Manual Chrome installation still uses `chrome://extensions` as described above.
+
+The verified Web Store package is created at `dist/reels-blocker.zip`, with `manifest.json` at the ZIP root.
+
+## Release
+
+- Store copy: [STORE_LISTING.md](STORE_LISTING.md)
+- Privacy policy: [PRIVACY.md](PRIVACY.md)
+- 90-day launch checklist: [LAUNCH_PLAN.md](LAUNCH_PLAN.md)
+- Public site: `docs/` (ready for GitHub Pages)
+
+Before public release, complete a trademark check for “ReelLess,” manually test authenticated and logged-out platform layouts, create the Chrome Web Store developer account, and upload the verified ZIP with deferred publishing.
+
+ReelLess is independent and is not affiliated with YouTube, Instagram, Facebook, TikTok, or their owners. Platform names and trademarks belong to their respective owners.

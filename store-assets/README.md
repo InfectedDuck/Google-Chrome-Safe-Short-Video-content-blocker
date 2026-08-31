@@ -1,16 +1,22 @@
-# Store Assets
+# ReelLess Store Assets
 
-Use these assets when preparing the Chrome Web Store listing.
+The listing set is generated from the real v2.2.0 extension UI with a temporary Chrome for Testing profile.
 
-## Included
+- `01-popup.png` — popup, four core switches, pauses, and local counts
+- `02-youtube-before-after.png` — YouTube fixture before and after the real guard runs
+- `03-instagram-facebook.png` — real guard behavior on Instagram/Facebook desktop fixtures
+- `04-advanced-settings.png` — schedules and optional-access settings
+- `05-focus-count.png` — TikTok focus screen and local blocked-attempt counts
+- `promo-440x280.png` — small promotional tile
+- `marquee-1400x560.png` — optional Chrome Web Store marquee tile
+- `reelless-icon-master.png` — transparent ImageGen master used for release icons
 
-- `promo-440x280.png`: small promotional tile.
-- `screenshot-1280x800.png`: launch screenshot-style graphic.
+All five screenshots are 1280×800. `screenshot-1280x800.png` mirrors the popup asset for compatibility with older release notes.
 
-## Manual Screenshots To Capture
+Regenerate the set with:
 
-- Popup showing the privacy trust section.
-- Options page showing schedule and custom list.
-- Chrome permissions prompt showing the minimal permission set.
+```powershell
+npm run screenshots
+```
 
-Do not include claims that the extension reads, watches, or analyzes browsing behavior. It does not.
+The social pages are controlled local fixtures so captures are repeatable and contain no account data. The extension UI and guard behavior are the real unpacked build.

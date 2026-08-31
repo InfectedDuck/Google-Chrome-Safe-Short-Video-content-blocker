@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Reels Blocker",
-  "version": "1.0.0",
-  "description": "Blocks short-form video with local Chrome rules and privacy-first permissions.",
+  "minimum_chrome_version": "99",
+  "name": "ReelLess — Shorts & Reels Blocker",
+  "version": "2.2.0",
+  "description": "Remove YouTube Shorts, Instagram and Facebook Reels, and TikTok distractions while keeping useful pages available.",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
@@ -10,7 +11,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "Reels Blocker",
+    "default_title": "ReelLess",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -21,20 +22,43 @@
   },
   "permissions": [
     "alarms",
-    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "scripting",
     "storage"
+  ],
+  "optional_host_permissions": [
+    "*://*/*"
   ],
   "background": {
     "service_worker": "service_worker.js"
   },
   "options_page": "options.html",
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "shortform_block_rules",
-        "enabled": true,
-        "path": "rules/block_rules.json"
-      }
-    ]
-  }
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://youtube.com/*",
+        "https://www.instagram.com/*",
+        "https://m.instagram.com/*",
+        "https://instagram.com/*",
+        "https://www.facebook.com/*",
+        "https://m.facebook.com/*",
+        "https://facebook.com/*",
+        "https://www.messenger.com/*",
+        "https://messenger.com/*",
+        "https://www.tiktok.com/*",
+        "https://m.tiktok.com/*",
+        "https://tiktok.com/*"
+      ],
+      "js": [
+        "shared.js",
+        "site_guard.js"
+      ],
+      "css": [
+        "site_guard.css"
+      ],
+      "run_at": "document_start"
+    }
+  ]
 }

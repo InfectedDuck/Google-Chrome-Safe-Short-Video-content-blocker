@@ -1,52 +1,29 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reels Blocker</title>
-    <link rel="stylesheet" href="popup.css">
-  </head>
-  <body>
-    <main class="panel" aria-labelledby="title">
-      <div class="brand-row">
-        <img src="icons/icon-48.png" width="40" height="40" alt="">
-        <div>
-          <h1 id="title">Reels Blocker</h1>
-          <p class="status" id="activeStatus">Checking...</p>
-        </div>
-      </div>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReelLess</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="brand"><img src="icons/icon-48.png" alt="" width="32" height="32"><strong>ReelLess</strong></div><span class="local-label">Local only</span></header>
 
-      <section class="summary" aria-label="Current settings">
-        <div>
-          <span class="metric" id="modeLabel">Always On</span>
-          <span class="caption">Mode</span>
-        </div>
-        <div>
-          <span class="metric" id="customCount">0</span>
-          <span class="caption">Custom</span>
-        </div>
-        <div>
-          <span class="metric" id="presetCount">0</span>
-          <span class="caption">Presets</span>
-        </div>
-      </section>
+    <section class="status-card" aria-live="polite"><span id="statusDot" class="status-dot" aria-hidden="true"></span><div><span class="status-kicker">Your focus boundary</span><strong id="statusText">Checking protection...</strong></div></section>
+    <p id="ultimateNotice" class="ultimate-notice" hidden>Ultimate Lock is active. Pausing and quick changes are unavailable.</p>
 
-      <section aria-label="Privacy promise">
-        <h2>No creepy permissions</h2>
-        <ul class="trust-list">
-          <li>No browsing history</li>
-          <li>No host permissions</li>
-          <li>No content scripts</li>
-          <li>No tracking or remote code</li>
-        </ul>
-      </section>
+    <section class="counts" aria-label="Blocked attempts"><div><strong id="todayCount">0</strong><span>blocked today</span></div><div><strong id="totalCount">0</strong><span>since install</span></div></section>
 
-      <div class="actions">
-        <button id="openOptions" type="button">Settings</button>
-        <a href="blocked.html" target="_blank" rel="noreferrer">Focus page</a>
-      </div>
-    </main>
-    <script src="shared.js"></script>
-    <script src="popup.js"></script>
-  </body>
+    <section aria-labelledby="platformTitle"><div class="section-heading"><h1 id="platformTitle">Protected sites</h1><span>Choose what stays useful</span></div><div id="platformList" class="platform-list"></div></section>
+
+    <section class="pause-card" aria-label="Pause protection"><div><strong>Need a deliberate pause?</strong><p>Choose a short window, then protection returns on its own.</p></div><div class="pause-row"><select id="pauseDuration"><option value="5">5 minutes</option><option value="15" selected>15 minutes</option><option value="30">30 minutes</option><option value="tomorrow">Until tomorrow</option></select><button id="pauseButton" type="button">Pause</button></div><button id="resumeButton" class="text-button" type="button" hidden>Resume protection now</button></section>
+
+    <aside id="reviewPrompt" class="review-prompt" hidden><button id="dismissReview" class="close" type="button" aria-label="Dismiss permanently">&times;</button><strong>Has ReelLess been useful?</strong><p>An honest review or bug report helps keep it dependable.</p><div><a id="reviewLink" target="_blank" rel="noreferrer">Leave a review</a><a href="https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker/issues" target="_blank" rel="noreferrer">Send feedback</a></div></aside>
+
+    <footer><span>Nothing leaves Chrome.</span><button id="settingsButton" class="settings-button" type="button">Settings</button></footer>
+  </main>
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
 </html>

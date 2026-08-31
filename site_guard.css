@@ -1,0 +1,94 @@
+[data-reelless-hidden="true"] {
+  display: none !important;
+}
+
+#reelless-focus-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(22, 31, 26, .66);
+  color: #1d2520;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color-scheme: light;
+}
+
+#reelless-focus-screen .reelless-card {
+  width: min(468px, calc(100vw - 48px));
+  padding: 30px;
+  border: 1px solid #c9d7ce;
+  border-radius: 12px;
+  background: #f9fcf9;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .18);
+  text-align: left;
+}
+
+#reelless-focus-screen .reelless-mark {
+  margin: 0 0 16px;
+  color: #3f745a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+#reelless-focus-screen h1 {
+  margin: 0 0 10px;
+  color: #1d2520;
+  font: 680 27px/1.08 "Segoe UI", system-ui, sans-serif;
+  letter-spacing: -.035em;
+}
+
+#reelless-focus-screen p {
+  margin: 0 0 22px;
+  color: #58665d;
+  font: 400 14px/1.55 "Segoe UI", system-ui, sans-serif;
+}
+
+#reelless-focus-screen .reelless-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+#reelless-focus-screen button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #87958c;
+  border-radius: 7px;
+  background: transparent;
+  color: #29372f;
+  cursor: pointer;
+  font: 600 13px "Segoe UI", system-ui, sans-serif;
+}
+
+#reelless-focus-screen button[data-action="pause"] {
+  border-color: #28745b;
+  background: #28745b;
+  color: #fff;
+}
+
+#reelless-focus-screen button:focus-visible {
+  outline: 2px solid #28745b;
+  outline-offset: 2px;
+}
+
+#reelless-focus-screen[data-theme="dark"] {
+  background: rgba(9, 14, 11, .76);
+  color: #edf0ed;
+  color-scheme: dark;
+}
+
+#reelless-focus-screen[data-theme="dark"] .reelless-card {
+  border-color: #3d4d43;
+  background: #222b25;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .38);
+}
+
+#reelless-focus-screen[data-theme="dark"] .reelless-mark { color: #a5d1b6; }
+#reelless-focus-screen[data-theme="dark"] h1 { color: #edf0ed; }
+#reelless-focus-screen[data-theme="dark"] p { color: #b8c4bb; }
+#reelless-focus-screen[data-theme="dark"] button { border-color: #68796f; background: transparent; color: #edf0ed; }
+#reelless-focus-screen[data-theme="dark"] button[data-action="pause"] { border-color: #4c9876; background: #3d8066; color: #fff; }

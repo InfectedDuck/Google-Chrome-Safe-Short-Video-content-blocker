@@ -1,20 +1,12 @@
 # Security Policy
 
-## Supported Versions
+The latest tagged release is supported. Report a vulnerability through a private GitHub security advisory; do not publish exploit details before the maintainer can investigate.
 
-The latest tagged release is supported.
+## Security and privacy goals
 
-## Reporting A Vulnerability
-
-Please open a private security advisory on GitHub or contact the maintainer directly.
-
-Do not publish exploit details before the maintainer has had a reasonable chance to investigate.
-
-## Security Goals
-
-- No browsing history access.
-- No host permissions.
-- No content scripts.
-- No remote code.
-- No analytics or tracking.
-- No external network calls from the extension.
+- No browsing-history, cookies, account, or message access.
+- Core scripts are limited to YouTube, Instagram, Facebook, and TikTok.
+- Advanced origins are optional and requested only when enabled.
+- Custom-domain rules use `declarativeNetRequestWithHostAccess` only after an exact origin grant.
+- No remote code, analytics, tracking, or extension-originated network calls.
+- Local statistics contain only a local date and two counts.

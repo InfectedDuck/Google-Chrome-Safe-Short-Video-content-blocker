@@ -1,111 +1,68 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A privacy-first Chrome extension that blocks TikTok, Instagram Reels, and YouTube Shorts without browsing history or site-data access.">
-    <title>Reels Blocker</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="assets/icon-128.png">
-  </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Reels Blocker home">
-        <img src="assets/icon-128.png" width="34" height="34" alt="">
-        <span>Reels Blocker</span>
-      </a>
-      <nav aria-label="Main navigation">
-        <a href="#privacy">Privacy</a>
-        <a href="#install">Install</a>
-        <a href="#github">GitHub</a>
-      </nav>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ReelLess removes YouTube Shorts, Instagram and Facebook Reels, and TikTok distractions while keeping useful pages available.">
+  <title>ReelLess &mdash; Shorts &amp; Reels Blocker</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/icon-128.png">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top"><img src="assets/icon-128.png" width="36" height="36" alt=""><span>ReelLess</span></a>
+    <nav aria-label="Main navigation"><a href="#how">How it works</a><a href="#sites">Sites</a><a href="privacy.html">Privacy</a><a href="support.html">Support</a></nav>
+  </header>
 
-    <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Chrome extension</p>
-          <h1>Block short-form video without creepy permissions.</h1>
-          <p class="lede">Reels Blocker stops TikTok, Instagram Reels, YouTube Shorts, optional short-form presets, and custom entries using local Chrome rules. No browsing history. No site-data access. No tracking.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="https://github.com/your-username/reels-blocker">View on GitHub</a>
-            <a class="button secondary" href="#install">Install locally</a>
-          </div>
-        </div>
-        <div class="trust-panel" aria-label="Permission promise">
-          <img src="assets/icon-128.png" width="96" height="96" alt="">
-          <ul>
-            <li>No browsing history access</li>
-            <li>No website data access</li>
-            <li>No content scripts</li>
-            <li>No analytics or remote code</li>
-            <li>Local settings only</li>
-          </ul>
-        </div>
-      </section>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">A quieter Chrome</span>
+        <h1>Keep the useful parts.<br>Lose the endless video.</h1>
+        <p class="lede">ReelLess blocks YouTube Shorts, Instagram and Facebook Reels, and TikTok feeds without taking away the pages you opened Chrome to use.</p>
+        <div class="actions"><a class="button primary" href="https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker">View on GitHub</a><a class="button secondary" href="#install">Install locally</a></div>
+        <p class="hero-note">Free, open source, account-free, and local to your browser.</p>
+      </div>
+      <aside class="preview" aria-label="ReelLess popup preview">
+        <div class="preview-head"><img src="assets/icon-128.png" width="40" height="40" alt=""><div><strong>Protection is active</strong><span>Nothing is sent anywhere.</span></div></div>
+        <div class="numbers"><div><strong>12</strong><span>blocked today</span></div><div><strong>146</strong><span>all time</span></div></div>
+        <div class="preview-sites"><span>YouTube Shorts <b>On</b></span><span>Instagram Reels <b>On</b></span><span>Facebook Reels <b>On</b></span><span>TikTok feeds <b>On</b></span></div>
+        <p class="preview-foot">Pause briefly when you need to. Your choice stays in Chrome.</p>
+      </aside>
+    </section>
 
-      <section id="privacy" class="band">
-        <div class="section-heading">
-          <p class="eyebrow">Privacy promise</p>
-          <h2>The blocker is intentionally small.</h2>
-        </div>
-        <div class="proof-grid">
-          <article>
-            <h3>Chrome blocks locally</h3>
-            <p>The extension uses Manifest V3 declarative rules, so Chrome applies blocking without the extension reading page contents.</p>
-          </article>
-          <article>
-            <h3>Only minimal permissions</h3>
-            <p>It avoids host permissions, browsing history permissions, cookies, tabs, content scripts, and account sign-in.</p>
-          </article>
-          <article>
-            <h3>Open source by design</h3>
-            <p>The rules, scripts, and privacy policy are visible in the repository so users can inspect what the extension does.</p>
-          </article>
-        </div>
-      </section>
+    <section id="how" class="journey" aria-labelledby="journeyTitle">
+      <div class="section-heading"><span class="eyebrow">How it works</span><h2 id="journeyTitle">A small interruption at the right moment.</h2><p>ReelLess focuses on short-form entry points, so the rest of each site can stay useful.</p></div>
+      <div class="journey-track">
+        <article><span class="journey-number">01</span><h3>Open what matters</h3><p>Search, messages, subscriptions, groups, and regular videos are still there.</p></article>
+        <article><span class="journey-number">02</span><h3>Short-form stops here</h3><p>Reels, Shorts, feeds, and direct short-video routes are quietly removed or intercepted.</p></article>
+        <article><span class="journey-number">03</span><h3>Choose the pressure</h3><p>Use the four defaults, pause with intent, or open Advanced for schedules and extra sites.</p></article>
+      </div>
+    </section>
 
-      <section class="blocked">
-        <div class="section-heading">
-          <p class="eyebrow">Blocked by default</p>
-          <h2>Short-form destinations, not your whole browser.</h2>
+    <section id="sites" class="platforms" aria-labelledby="platformsTitle">
+      <div class="section-heading compact"><span class="eyebrow">Supported sites</span><h2 id="platformsTitle">Start protected. Add only what you need.</h2></div>
+      <div class="platform-board">
+        <div class="platform-group core-group">
+          <div class="group-heading"><div><span class="group-kicker">Included after install</span><h3>Core protection</h3></div><p>Ready immediately.</p></div>
+          <div class="platform-chips core-chips"><span>YouTube Shorts</span><span>Instagram Reels</span><span>Facebook Reels</span><span>TikTok</span></div>
         </div>
-        <div class="platforms">
-          <span>TikTok</span>
-          <span>Instagram Reels</span>
-          <span>YouTube Shorts</span>
-          <span>Custom entries</span>
-          <span>Local schedules</span>
-          <span>Optional presets</span>
+        <div class="platform-group optional-group">
+          <div class="group-heading"><div><span class="group-kicker">Optional in Advanced</span><h3>More places to focus</h3></div><p>Access is requested only when you turn a site on.</p></div>
+          <div class="platform-chips"><span>X / Twitter video</span><span>Reddit short video communities</span><span>Snapchat Spotlight</span><span>Twitch Clips</span><span>Pinterest Watch</span><span>LinkedIn video</span><span>Threads media</span></div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="install" class="band split">
-        <div>
-          <p class="eyebrow">Install locally</p>
-          <h2>Try it before the store listing is live.</h2>
-        </div>
-        <ol>
-          <li>Download or clone the repository.</li>
-          <li>Open <code>chrome://extensions</code>.</li>
-          <li>Enable Developer mode.</li>
-          <li>Click Load unpacked and select the project folder.</li>
-        </ol>
-      </section>
+    <section id="install" class="closing" aria-labelledby="closingTitle">
+      <div class="closing-intro"><span class="eyebrow">Development install</span><h2 id="closingTitle">A blocker that keeps its distance.</h2><p>ReelLess processes the current page locally. It has no account, analytics, ads, or external requests.</p></div>
+      <div class="closing-details">
+        <div class="principles"><p><strong>Permission by choice.</strong> Core sites work after installation. Extra sites ask only when you enable them.</p><p><strong>Counts without history.</strong> ReelLess stores a local day and two numbers&mdash;never URLs, titles, or watch history.</p></div>
+        <div class="install-box"><strong>Try it in Chrome</strong><p><span>1</span> Open <code>chrome://extensions</code> and enable Developer mode.</p><p><span>2</span> Click <em>Load unpacked</em> and choose this project folder, not the ZIP.</p><p><span>3</span> Pin ReelLess, then refresh a supported site.</p><a class="button primary" href="https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker">Get the source</a></div>
+      </div>
+    </section>
+  </main>
 
-      <section id="github" class="github">
-        <div>
-          <p class="eyebrow">For reviewers and users</p>
-          <h2>Built to be easy to audit.</h2>
-          <p>Every release is tagged, packaged, and documented. The public repository is the proof that this blocker is focused on one job.</p>
-        </div>
-        <a class="button primary" href="https://github.com/your-username/reels-blocker">Open GitHub repo</a>
-      </section>
-    </main>
-
-    <footer>
-      <span>Reels Blocker</span>
-      <a href="https://github.com/your-username/reels-blocker">GitHub</a>
-    </footer>
-  </body>
+  <footer><span>ReelLess is independent and not affiliated with supported platforms.</span><nav><a href="privacy.html">Privacy</a><a href="support.html">Support</a><a href="https://github.com/InfectedDuck/Google-Chrome-Safe-Short-Video-content-blocker">Source</a></nav></footer>
+</body>
 </html>

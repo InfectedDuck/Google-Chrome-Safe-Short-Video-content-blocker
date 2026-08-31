@@ -1,0 +1,17 @@
+{
+  "name": "reelless-extension",
+  "version": "2.2.0",
+  "private": true,
+  "description": "ReelLess Chrome extension development and release checks",
+  "scripts": {
+    "test": "node scripts/test-shared.mjs && node scripts/test-service-worker.mjs && node scripts/test-site-guard.mjs && node scripts/test-docs.mjs",
+    "validate": "powershell -ExecutionPolicy Bypass -File scripts/validate-extension.ps1",
+    "build": "powershell -ExecutionPolicy Bypass -File scripts/build-package.ps1",
+    "smoke": "node scripts/smoke-extension.mjs",
+    "screenshots": "node scripts/capture-store-assets.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "playwright-core": "^1.55.0"
+  }
+}

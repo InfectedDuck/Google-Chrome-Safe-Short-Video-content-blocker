@@ -1,29 +1,25 @@
-# Contributing
+# Contributing to ReelLess
 
-Thanks for helping keep Reels Blocker useful and trustworthy.
+Keep the extension focused on removing short-form distractions while preserving useful pages.
 
-## Product Principles
+## Product principles
 
-- Keep the extension single-purpose: block short-form video distractions.
-- Avoid browsing history, host permissions, content scripts, analytics, accounts, and remote code.
-- Prefer local Chrome APIs and readable rules over clever background behavior.
-- Explain every new permission in `STORE_LISTING.md` and `README.md`.
+- Four reliable core sites matter more than a larger platform count.
+- Runs only on sites the user enables; Advanced access is requested from a user action.
+- No browsing-history permission, telemetry, accounts, remote code, ads, or external requests.
+- Never store blocked URLs, titles, or platform history.
+- DOM guards must use debounced observers and safe ancestors; never hide an entire main layout accidentally.
+- Permission, processing, or storage changes require matching privacy and Store listing updates.
 
-## Development
-
-Run the checks before opening a pull request:
+## Checks
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/test-rules.ps1
-node scripts/test-shared.mjs
-powershell -ExecutionPolicy Bypass -File scripts/validate-extension.ps1
-powershell -ExecutionPolicy Bypass -File scripts/build-package.ps1
+npm install
+npx playwright-core install chromium
+npm test
+npm run validate
+npm run smoke
+npm run build
 ```
 
-Load the project folder in `chrome://extensions` to test manually.
-
-## Pull Requests
-
-- Keep changes small and focused.
-- Include tests for rule or settings behavior.
-- Update privacy and store listing text when permissions or data behavior changes.
+Also load the project folder from `chrome://extensions` and manually exercise logged-in and logged-out layouts before a release.
